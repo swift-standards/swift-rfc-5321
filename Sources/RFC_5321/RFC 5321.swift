@@ -54,7 +54,7 @@ public struct EmailAddress: Hashable, Sendable {
             let domain = String(captures.3)
 
             // Check total length before creating components
-            let addressLength = localPart.count + 1 + domain.count // +1 for @
+            let addressLength = localPart.count + 1 + domain.count  // +1 for @
             guard addressLength <= Limits.maxTotalLength else {
                 throw ValidationError.totalLengthExceeded(addressLength)
             }
@@ -120,9 +120,10 @@ extension RFC_5321.EmailAddress {
             }
         }
 
+        // swiftlint:disable:next nesting
         private enum Storage: Hashable {
             case dotAtom(String)  // Regular unquoted format
-            case quoted(String)   // Quoted string format
+            case quoted(String)  // Quoted string format
         }
     }
 }
@@ -135,7 +136,8 @@ extension RFC_5321.EmailAddress {
     }
 
     // Dot-atom regex: series of atoms separated by dots
-    nonisolated(unsafe) private static let dotAtomRegex = /[a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]+(?:\.[a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]+)*/
+    nonisolated(unsafe) private static let dotAtomRegex =
+        /[a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]+(?:\.[a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]+)*/
 
     // Quoted string regex: allows any printable character except unescaped quotes
     nonisolated(unsafe) private static let quotedRegex = /(?:[^"\\]|\\["\\])+/
@@ -145,10 +147,11 @@ extension RFC_5321.EmailAddress {
     /// The complete email address string, including display name if present
     public var stringValue: String {
         if let name = displayName {
-            let needsQuoting = name.contains(where: { !$0.isLetter && !$0.isNumber && !$0.isWhitespace })
-            let quotedName = needsQuoting ?
-                "\"\(name.replacingOccurrences(of: "\"", with: "\\\""))\"" :
-                name
+            let needsQuoting = name.contains(where: {
+                !$0.isLetter && !$0.isNumber && !$0.isWhitespace
+            })
+            let quotedName =
+                needsQuoting ? "\"\(name.replacingOccurrences(of: "\"", with: "\\\""))\"" : name
             return "\(quotedName) <\(localPart.stringValue)@\(domain.name)>"  // Exactly one space before angle bracket
         }
         return "\(localPart.stringValue)@\(domain.name)"
