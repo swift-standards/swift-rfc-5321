@@ -2,6 +2,7 @@ disabled_rules:
   - line_length
   - trailing_comma
   - redundant_discardable_let
+  - nesting
 
 opt_in_rules:
   - explicit_init
