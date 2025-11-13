@@ -85,7 +85,7 @@ public struct EmailAddress: Hashable, Sendable {
 // MARK: - Local Part
 extension RFC_5321.EmailAddress {
     /// RFC 5321 compliant local-part
-    public struct LocalPart: Hashable, Sendable {
+    public struct LocalPart: Hashable, Sendable, CustomStringConvertible {
         private let storage: Storage
 
         /// Initialize with a string
@@ -119,6 +119,9 @@ extension RFC_5321.EmailAddress {
                 return string
             }
         }
+
+        /// Description for CustomStringConvertible
+        public var description: String { stringValue }
 
         // swiftlint:disable:next nesting
         private enum Storage: Hashable {
