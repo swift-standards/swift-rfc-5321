@@ -14,7 +14,7 @@ struct ReadmeVerificationTests {
     @Test("README Line 52-55: Parse simple email address")
     func parseSimpleEmailAddress() throws {
         let email = try EmailAddress("user@example.com")
-        #expect(email.localPart.stringValue == "user")
+        #expect(email.localPart.description == "user")
         #expect(email.domain.name == "example.com")
     }
 
@@ -51,9 +51,9 @@ struct ReadmeVerificationTests {
         let valid2 = try EmailAddress("user.name@example.com")
         let valid3 = try EmailAddress("\"user name\"@example.com")
 
-        #expect(valid1.localPart.stringValue == "simple")
-        #expect(valid2.localPart.stringValue == "user.name")
-        #expect(valid3.localPart.stringValue == "\"user name\"")
+        #expect(valid1.localPart.description == "simple")
+        #expect(valid2.localPart.description == "user.name")
+        #expect(valid3.localPart.description == "\"user name\"")
     }
 
     @Test("README Line 91-96: Invalid address throws missing at sign")

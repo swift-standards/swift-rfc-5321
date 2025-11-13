@@ -136,6 +136,8 @@ extension RFC_5321.EmailAddress {
     }
 
     // Dot-atom regex: series of atoms separated by dots
+    // RFC 5321 uses the atext definition from RFC 5322 Section 3.2.3
+    // atext = ALPHA / DIGIT / "!" / "#" / "$" / "%" / "&" / "'" / "*" / "+" / "-" / "/" / "=" / "?" / "^" / "_" / "`" / "{" / "|" / "}" / "~"
     nonisolated(unsafe) private static let dotAtomRegex =
         /[a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]+(?:\.[a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]+)*/
 
