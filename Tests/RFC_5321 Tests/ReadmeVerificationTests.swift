@@ -22,7 +22,7 @@ struct ReadmeVerificationTests {
     func parseWithDisplayName() throws {
         let namedEmail = try EmailAddress("John Doe <john@example.com>")
         #expect(namedEmail.displayName == "John Doe")
-        #expect(namedEmail.addressValue == "john@example.com")
+        #expect(namedEmail.address == "john@example.com")
     }
 
     @Test("README Line 62-64: Parse with quoted display name")
@@ -41,8 +41,8 @@ struct ReadmeVerificationTests {
             domain: domain
         )
 
-        #expect(email.stringValue == "Support Team <support@example.com>")
-        #expect(email.addressValue == "support@example.com")
+        #expect(email.description == "Support Team <support@example.com>")
+        #expect(email.address == "support@example.com")
     }
 
     @Test("README Line 86-89: Valid addresses")

@@ -57,7 +57,7 @@ print(email.domain.name) // "example.com"
 // Parse with display name
 let namedEmail = try EmailAddress("John Doe <john@example.com>")
 print(namedEmail.displayName) // "John Doe"
-print(namedEmail.addressValue) // "john@example.com"
+print(namedEmail.address) // "john@example.com"
 
 // Parse with quoted display name
 let quotedEmail = try EmailAddress("\"Doe, John\" <john@example.com>")
@@ -77,7 +77,7 @@ let email = EmailAddress(
 )
 
 print(email.stringValue) // "Support Team <support@example.com>"
-print(email.addressValue) // "support@example.com"
+print(email.address) // "support@example.com"
 ```
 
 ### Validation
@@ -118,7 +118,7 @@ public struct EmailAddress: Hashable, Sendable {
     public init(_ string: String) throws
 
     public var stringValue: String      // Full format with display name
-    public var addressValue: String     // Just the email address part
+    public var address: String     // Just the email address part
 }
 ```
 

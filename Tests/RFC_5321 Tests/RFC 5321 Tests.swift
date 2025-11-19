@@ -5,8 +5,8 @@
 //  Created by Coen ten Thije Boonkkamp on 28/12/2024.
 //
 
-import Foundation
 import RFC_5321
+import Foundation
 import Testing
 
 @Suite("RFC 5321 Domain Tests")
