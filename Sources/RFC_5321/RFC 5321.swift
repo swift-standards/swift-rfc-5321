@@ -1,5 +1,6 @@
-import Foundation
 import RegexBuilder
+import Standards
+import INCITS_4_1986
 
 @_exported import struct RFC_1123.Domain
 
@@ -16,7 +17,7 @@ public struct EmailAddress: Hashable, Sendable {
 
     /// Initialize with components
     public init(displayName: String? = nil, localPart: LocalPart, domain: RFC_1123.Domain) {
-        self.displayName = displayName?.trimmingCharacters(in: .whitespaces)
+        self.displayName = displayName?.trimming(.whitespaces)
         self.localPart = localPart
         self.domain = domain
     }
@@ -41,11 +42,11 @@ public struct EmailAddress: Hashable, Sendable {
 
             // Extract display name if present and normalize spaces
             let displayName = captures.1.map { name in
-                let trimmedName = name.trimmingCharacters(in: .whitespaces)
+                let trimmedName = name.trimming(.whitespaces)
                 if trimmedName.hasPrefix("\"") && trimmedName.hasSuffix("\"") {
                     let withoutQuotes = String(trimmedName.dropFirst().dropLast())
-                    return withoutQuotes.replacingOccurrences(of: "\\\"", with: "\"")
-                        .replacingOccurrences(of: "\\\\", with: "\\")
+                    return withoutQuotes.replacing("\\\"", with: "\"")
+                        .replacing("\\\\", with: "\\")
                 }
                 return trimmedName
             }
@@ -90,6 +91,11 @@ extension RFC_5321.EmailAddress {
 
         /// Initialize with a string
         public init(_ string: String) throws {
+            // RFC 5321 is ASCII-only - validate before processing
+            guard string.asciiBytes != nil else {
+                throw ValidationError.nonASCIICharacters
+            }
+
             // Check overall length first
             guard string.count <= Limits.maxLength else {
                 throw ValidationError.localPartTooLong(string.count)
@@ -145,34 +151,44 @@ extension RFC_5321.EmailAddress {
     nonisolated(unsafe) private static let quotedRegex = /(?:[^"\\]|\\["\\])+/
 }
 
-extension RFC_5321.EmailAddress {
-    /// The complete email address string, including display name if present
-    public var stringValue: String {
-        if let name = displayName {
+extension String {
+    public init(
+        _ email: RFC_5321.EmailAddress
+    ) {
+        if let name = email.displayName {
             let needsQuoting = name.contains(where: {
-                !$0.isLetter && !$0.isNumber && !$0.isWhitespace
+                !$0.isASCIILetter && !$0.isASCIIDigit && !$0.isASCIIWhitespace
             })
             let quotedName =
-                needsQuoting ? "\"\(name.replacingOccurrences(of: "\"", with: "\\\""))\"" : name
-            return "\(quotedName) <\(localPart)@\(domain.name)>"  // Exactly one space before angle bracket
+                needsQuoting ? "\"\(name.replacing("\"", with: "\\\""))\"" : name
+            self = "\(quotedName) <\(email.localPart)@\(email.domain.name)>"  // Exactly one space before angle bracket
+        } else {
+            self = "\(email.localPart)@\(email.domain.name)"
         }
-        return "\(localPart)@\(domain.name)"
+    }
+}
+
+extension RFC_5321.EmailAddress {
+    /// The complete email address string, including display name if present
+    public var value: String {
+        String(self)
     }
 
     /// Just the email address part without display name
-    public var addressValue: String {
+    public var address: String {
         "\(localPart)@\(domain.name)"
     }
 }
 
 // MARK: - Errors
 extension RFC_5321.EmailAddress {
-    public enum ValidationError: Error, LocalizedError, Equatable {
+    public enum ValidationError: Error, Equatable {
         case missingAtSign
         case invalidDotAtom
         case invalidQuotedString
         case totalLengthExceeded(_ length: Int)
         case localPartTooLong(_ length: Int)
+        case nonASCIICharacters
 
         public var errorDescription: String? {
             switch self {
@@ -186,6 +202,8 @@ extension RFC_5321.EmailAddress {
                 return "Local-part length \(length) exceeds maximum of \(Limits.maxLength)"
             case .totalLengthExceeded(let length):
                 return "Total length \(length) exceeds maximum of \(Limits.maxTotalLength)"
+            case .nonASCIICharacters:
+                return "RFC 5321 email addresses must contain only ASCII characters"
             }
         }
     }
@@ -193,7 +211,7 @@ extension RFC_5321.EmailAddress {
 
 // MARK: - Protocol Conformances
 extension RFC_5321.EmailAddress: CustomStringConvertible {
-    public var description: String { stringValue }
+    public var description: String { String(self) }
 }
 
 extension RFC_5321.EmailAddress: Codable {
@@ -210,6 +228,6 @@ extension RFC_5321.EmailAddress: Codable {
 }
 
 extension RFC_5321.EmailAddress: RawRepresentable {
-    public var rawValue: String { stringValue }
+    public var rawValue: String { String(self) }
     public init?(rawValue: String) { try? self.init(rawValue) }
 }
