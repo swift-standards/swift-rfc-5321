@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version:6.2
 
 import PackageDescription
 
@@ -11,7 +11,7 @@ let package = Package(
         .watchOS(.v11)
     ],
     products: [
-        .library(name: "RFC_5321", targets: ["RFC_5321"]),
+        .library(name: "RFC 5321", targets: ["RFC 5321"]),
     ],
     dependencies: [
         .package(url: "https://github.com/swift-standards/swift-incits-4-1986.git", from: "0.0.1"),
@@ -19,16 +19,16 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "RFC_5321",
+            name: "RFC 5321",
             dependencies: [
-                .product(name: "RFC_1123", package: "swift-rfc-1123"),
+                .product(name: "RFC 1123", package: "swift-rfc-1123"),
                 .product(name: "INCITS 4 1986", package: "swift-incits-4-1986")
             ]
         ),
         .testTarget(
-            name: "RFC_5321".tests,
+            name: "RFC 5321".tests,
             dependencies: [
-                "RFC_5321"
+                "RFC 5321"
             ]
         ),
     ],
