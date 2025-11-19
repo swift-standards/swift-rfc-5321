@@ -9,16 +9,16 @@ import RFC_5321
 import Foundation
 import Testing
 
-@Suite("RFC 5321 Domain Tests")
-struct RFC5321Tests {
-    @Test("Successfully creates standard domain")
-    func testStandardDomain() throws {
+@Suite
+struct `RFC 5321 Domain Tests` {
+    @Test
+    func `Successfully creates standard domain`() throws {
         let domain = try Domain("mail.example.com")
         #expect(domain.name == "mail.example.com")
     }
 
-    @Test("Fails with empty address literal")
-    func testEmptyAddressLiteral() throws {
+    @Test
+    func `Fails with empty address literal`() throws {
         #expect(throws: Error.self) {
             _ = try Domain("[]")
         }
@@ -73,8 +73,8 @@ struct RFC5321Tests {
     //        #expect(domain.addressLiteral == ipv6)
     //    }
 
-    @Test("Successfully encodes and decodes standard domain")
-    func testCodableStandardDomain() throws {
+    @Test
+    func `Successfully encodes and decodes standard domain`() throws {
         let original = try Domain("mail.example.com")
         let encoded = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(Domain.self, from: encoded)

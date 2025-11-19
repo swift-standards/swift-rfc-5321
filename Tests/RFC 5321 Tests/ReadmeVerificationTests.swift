@@ -8,31 +8,31 @@
 import RFC_5321
 import Testing
 
-@Suite("README Verification")
-struct ReadmeVerificationTests {
+@Suite
+struct `README Verification` {
 
-    @Test("README Line 52-55: Parse simple email address")
-    func parseSimpleEmailAddress() throws {
+    @Test
+    func `README Line 52-55: Parse simple email address`() throws {
         let email = try EmailAddress("user@example.com")
         #expect(email.localPart.description == "user")
         #expect(email.domain.name == "example.com")
     }
 
-    @Test("README Line 57-60: Parse with display name")
-    func parseWithDisplayName() throws {
+    @Test
+    func `README Line 57-60: Parse with display name`() throws {
         let namedEmail = try EmailAddress("John Doe <john@example.com>")
         #expect(namedEmail.displayName == "John Doe")
         #expect(namedEmail.address == "john@example.com")
     }
 
-    @Test("README Line 62-64: Parse with quoted display name")
-    func parseWithQuotedDisplayName() throws {
+    @Test
+    func `README Line 62-64: Parse with quoted display name`() throws {
         let quotedEmail = try EmailAddress("\"Doe, John\" <john@example.com>")
         #expect(quotedEmail.displayName == "Doe, John")
     }
 
-    @Test("README Line 70-80: Create from components")
-    func createFromComponents() throws {
+    @Test
+    func `README Line 70-80: Create from components`() throws {
         let localPart = try EmailAddress.LocalPart("support")
         let domain = try Domain("example.com")
         let email = EmailAddress(
@@ -45,8 +45,8 @@ struct ReadmeVerificationTests {
         #expect(email.address == "support@example.com")
     }
 
-    @Test("README Line 86-89: Valid addresses")
-    func validAddresses() throws {
+    @Test
+    func `README Line 86-89: Valid addresses`() throws {
         let valid1 = try EmailAddress("simple@example.com")
         let valid2 = try EmailAddress("user.name@example.com")
         let valid3 = try EmailAddress("\"user name\"@example.com")
@@ -56,15 +56,15 @@ struct ReadmeVerificationTests {
         #expect(valid3.localPart.description == "\"user name\"")
     }
 
-    @Test("README Line 91-96: Invalid address throws missing at sign")
-    func invalidAddressMissingAtSign() throws {
+    @Test
+    func `README Line 91-96: Invalid address throws missing at sign`() throws {
         #expect(throws: EmailAddress.ValidationError.missingAtSign) {
             _ = try EmailAddress("no-at-sign")
         }
     }
 
-    @Test("README Line 98-102: Invalid address local part too long")
-    func invalidAddressLocalPartTooLong() throws {
+    @Test
+    func `README Line 98-102: Invalid address local part too long`() throws {
         let longAddress =
             "verylonglocalpartthatexceedssixtyfourcharactersshouldnotbeallowed@example.com"
         #expect(throws: EmailAddress.ValidationError.self) {
@@ -72,8 +72,8 @@ struct ReadmeVerificationTests {
         }
     }
 
-    @Test("README Line 145: Domain usage")
-    func domainUsage() throws {
+    @Test
+    func `README Line 145: Domain usage`() throws {
         let domain = try Domain("mail.example.com")
         #expect(domain.name == "mail.example.com")
     }
