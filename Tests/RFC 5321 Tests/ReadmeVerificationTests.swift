@@ -6,7 +6,10 @@
 //
 
 import RFC_5321
+import RFC_1123
 import Testing
+
+typealias EmailAddress = RFC_5321.EmailAddress
 
 @Suite
 struct `README Verification` {
@@ -35,7 +38,7 @@ struct `README Verification` {
     func `README Line 70-80: Create from components`() throws {
         let localPart = try EmailAddress.LocalPart("support")
         let domain = try Domain("example.com")
-        let email = EmailAddress(
+        let email = try EmailAddress(
             displayName: "Support Team",
             localPart: localPart,
             domain: domain
@@ -58,8 +61,8 @@ struct `README Verification` {
 
     @Test
     func `README Line 91-96: Invalid address throws missing at sign`() throws {
-        #expect(throws: EmailAddress.ValidationError.missingAtSign) {
-            _ = try EmailAddress("no-at-sign")
+        #expect(throws: RFC_5321.EmailAddress.Error.missingAtSign) {
+            _ = try RFC_5321.EmailAddress("no-at-sign")
         }
     }
 
@@ -67,8 +70,8 @@ struct `README Verification` {
     func `README Line 98-102: Invalid address local part too long`() throws {
         let longAddress =
             "verylonglocalpartthatexceedssixtyfourcharactersshouldnotbeallowed@example.com"
-        #expect(throws: EmailAddress.ValidationError.self) {
-            _ = try EmailAddress(longAddress)
+        #expect(throws: RFC_5321.EmailAddress.Error.self) {
+            _ = try RFC_5321.EmailAddress(longAddress)
         }
     }
 

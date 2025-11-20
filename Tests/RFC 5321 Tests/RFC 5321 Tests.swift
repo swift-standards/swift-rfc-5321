@@ -6,6 +6,7 @@
 //
 
 import RFC_5321
+import RFC_1123
 import Foundation
 import Testing
 
@@ -13,14 +14,14 @@ import Testing
 struct `RFC 5321 Domain Tests` {
     @Test
     func `Successfully creates standard domain`() throws {
-        let domain = try Domain("mail.example.com")
+        let domain = try RFC_1123.Domain("mail.example.com")
         #expect(domain.name == "mail.example.com")
     }
 
     @Test
     func `Fails with empty address literal`() throws {
-        #expect(throws: Error.self) {
-            _ = try Domain("[]")
+        #expect(throws: RFC_1123.Domain.Error.self) {
+            _ = try RFC_1123.Domain("[]")
         }
     }
 
@@ -75,9 +76,9 @@ struct `RFC 5321 Domain Tests` {
 
     @Test
     func `Successfully encodes and decodes standard domain`() throws {
-        let original = try Domain("mail.example.com")
+        let original = try RFC_1123.Domain("mail.example.com")
         let encoded = try JSONEncoder().encode(original)
-        let decoded = try JSONDecoder().decode(Domain.self, from: encoded)
+        let decoded = try JSONDecoder().decode(RFC_1123.Domain.self, from: encoded)
         #expect(original == decoded)
     }
 
