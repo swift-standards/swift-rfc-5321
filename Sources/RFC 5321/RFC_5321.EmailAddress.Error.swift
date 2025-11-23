@@ -34,7 +34,7 @@ extension RFC_5321.EmailAddress {
         case invalidLocalPart(_ error: LocalPart.Error)
 
         /// Domain validation failed
-        case invalidDomain(_ error: RFC_1123.Domain.Error)
+        case invalidDomain(_ error: Domain.ValidationError)
     }
 }
 
@@ -48,9 +48,9 @@ extension RFC_5321.EmailAddress.Error: CustomStringConvertible {
         case .totalLengthExceeded(let length):
             return "Email address is too long (\(length) bytes, maximum 254)"
         case .invalidLocalPart(let error):
-            return "Invalid local-part: \(error.description)"
+            return "Invalid local-part: \(error)"
         case .invalidDomain(let error):
-            return "Invalid domain: \(error.description)"
+            return "Invalid domain: \(error)"
         }
     }
 }

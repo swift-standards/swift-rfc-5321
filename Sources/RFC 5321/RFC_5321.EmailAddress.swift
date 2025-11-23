@@ -28,8 +28,8 @@ extension RFC_5321 {
         /// Initialize with validated components
         ///
         /// This is the canonical initializer. Components are already validated.
-        public init(displayName: String? = nil, localPart: LocalPart, domain: RFC_1123.Domain) throws(Error) {
-            self.displayName = displayName?.trimming(.whitespaces)
+        public init(displayName: (some StringProtocol)? = nil, localPart: LocalPart, domain: RFC_1123.Domain) throws(Error) {
+            self.displayName = displayName.map { String($0).trimming(.ascii.whitespaces) }
             self.localPart = localPart
             self.domain = domain
 
@@ -48,7 +48,8 @@ extension RFC_5321.EmailAddress {
     /// Initialize from string representation ("Name <local@domain>" or "local@domain")
     ///
     /// Convenience initializer that parses and validates the email address.
-    public init(_ string: String) throws(Error) {
+    public init(_ string: some StringProtocol) throws(Error) {
+        let stringValue = String(string)
         let displayNameCapture = /(?:((?:\"(?:[^\"\\]|\\.)*\"|[^<]+?))\s*)/
         let emailCapture = /<([^@]+)@([^>]+)>/
 
@@ -60,12 +61,12 @@ extension RFC_5321.EmailAddress {
         }
 
         // Try matching the full address format first (with angle brackets)
-        if let match = try? fullRegex.wholeMatch(in: string) {
+        if let match = try? fullRegex.wholeMatch(in: stringValue) {
             let captures = match.output
 
             // Extract display name if present and normalize spaces
             let displayName = captures.1.map { name in
-                let trimmedName = name.trimming(.whitespaces)
+                let trimmedName = name.trimming(.ascii.whitespaces)
                 if trimmedName.hasPrefix("\"") && trimmedName.hasSuffix("\"") {
                     let withoutQuotes = String(trimmedName.dropFirst().dropLast())
                     return withoutQuotes.replacing("\\\"", with: "\"")
@@ -81,48 +82,52 @@ extension RFC_5321.EmailAddress {
             let localPart: LocalPart
             do {
                 localPart = try LocalPart(localPartString)
-            } catch {
-                throw Error.invalidLocalPart(error)
+            } catch let localError {
+                throw Error.invalidLocalPart(localError)
             }
 
             let domain: RFC_1123.Domain
             do {
                 domain = try RFC_1123.Domain(domainString)
+            } catch let domainError as Domain.ValidationError {
+                throw Error.invalidDomain(domainError)
             } catch {
-                throw Error.invalidDomain(error)
+                fatalError("Unexpected error type from RFC_1123.Domain.init: \(error)")
             }
 
             try self.init(
-                displayName: displayName,
+                displayName: displayName as String?,
                 localPart: localPart,
                 domain: domain
             )
         } else {
             // Try parsing as bare email address
-            guard let atIndex = string.firstIndex(of: "@") else {
+            guard let atIndex = stringValue.firstIndex(of: "@") else {
                 throw Error.missingAtSign
             }
 
-            let localString = String(string[..<atIndex])
-            let domainString = String(string[string.index(after: atIndex)...])
+            let localString = String(stringValue[..<atIndex])
+            let domainString = String(stringValue[stringValue.index(after: atIndex)...])
 
             // Validate and construct components with error wrapping
             let localPart: LocalPart
             do {
                 localPart = try LocalPart(localString)
-            } catch {
-                throw Error.invalidLocalPart(error)
+            } catch let localError {
+                throw Error.invalidLocalPart(localError)
             }
 
             let domain: RFC_1123.Domain
             do {
                 domain = try RFC_1123.Domain(domainString)
+            } catch let domainError as Domain.ValidationError {
+                throw Error.invalidDomain(domainError)
             } catch {
-                throw Error.invalidDomain(error)
+                fatalError("Unexpected error type from RFC_1123.Domain.init: \(error)")
             }
 
             try self.init(
-                displayName: nil,
+                displayName: nil as String?,
                 localPart: localPart,
                 domain: domain
             )
@@ -182,5 +187,5 @@ extension RFC_5321.EmailAddress: Codable {
 
 extension RFC_5321.EmailAddress: RawRepresentable {
     public var rawValue: String { String(self) }
-    public init?(rawValue: String) { try? self.init(rawValue) }
+    public init?(rawValue: some StringProtocol) { try? self.init(rawValue) }
 }

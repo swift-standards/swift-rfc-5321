@@ -28,38 +28,40 @@ extension RFC_5321.EmailAddress {
         /// Initialize a local-part from a string, validating RFC 5321 rules
         ///
         /// This is the canonical initializer that performs validation.
-        public init(_ string: String) throws(Error) {
+        public init(_ string: some StringProtocol) throws(Error) {
+            let stringValue = String(string)
+
             // Check emptiness
-            guard !string.isEmpty else {
+            guard !stringValue.isEmpty else {
                 throw Error.empty
             }
 
             // RFC 5321 is ASCII-only - validate before processing
-            guard string.allSatisfy({ $0.isASCII }) else {
+            guard stringValue.allSatisfy({ $0.isASCII }) else {
                 throw Error.nonASCII
             }
 
             // Check overall length
-            guard string.count <= Limits.maxLength else {
-                throw Error.tooLong(string.count)
+            guard stringValue.count <= Limits.maxLength else {
+                throw Error.tooLong(stringValue.count)
             }
 
             // Handle quoted string format
-            if string.hasPrefix("\"") && string.hasSuffix("\"") {
-                let quoted = String(string.dropFirst().dropLast())
+            if stringValue.hasPrefix("\"") && stringValue.hasSuffix("\"") {
+                let quoted = String(stringValue.dropFirst().dropLast())
                 guard (try? RFC_5321.EmailAddress.quotedRegex.wholeMatch(in: quoted)) != nil else {
-                    throw Error.invalidQuotedString(string)
+                    throw Error.invalidQuotedString(stringValue)
                 }
                 self.format = .quoted
-                self._value = [UInt8](utf8: string)
+                self._value = [UInt8](utf8: stringValue)
             }
             // Handle dot-atom format
             else {
-                guard (try? RFC_5321.EmailAddress.dotAtomRegex.wholeMatch(in: string)) != nil else {
-                    throw Error.invalidDotAtom(string)
+                guard (try? RFC_5321.EmailAddress.dotAtomRegex.wholeMatch(in: stringValue)) != nil else {
+                    throw Error.invalidDotAtom(stringValue)
                 }
                 self.format = .dotAtom
-                self._value = [UInt8](utf8: string)
+                self._value = [UInt8](utf8: stringValue)
             }
         }
 
