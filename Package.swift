@@ -21,7 +21,7 @@ let package = Package(
         .target(
             name: "RFC 5321",
             dependencies: [
-                .product(name: "RFC_1123", package: "swift-rfc-1123"),
+                .product(name: "RFC 1123", package: "swift-rfc-1123"),
                 .product(name: "INCITS 4 1986", package: "swift-incits-4-1986")
             ]
         ),

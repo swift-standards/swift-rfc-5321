@@ -17,29 +17,11 @@
 
 import INCITS_4_1986
 import Standards
-public import RFC_1123
+import RFC_1123
 
 // MARK: - LocalPart String Representation
 
 extension String {
-    /// Creates string representation of an RFC 5321 local-part using UTF-8 encoding
-    ///
-    /// This is the canonical string representation that composes through bytes.
-    ///
-    /// ## Category Theory
-    ///
-    /// This is functor composition through the canonical byte representation:
-    /// ```
-    /// LocalPart → [UInt8] (ASCII) → String (UTF-8 interpretation)
-    /// ```
-    ///
-    /// ASCII is a subset of UTF-8, so this conversion is always safe.
-    ///
-    /// - Parameter localPart: The local-part to represent
-    public init(_ localPart: RFC_5321.EmailAddress.LocalPart) {
-        self.init(decoding: [UInt8](localPart), as: UTF8.self)
-    }
-
     /// Creates string representation of an RFC 5321 local-part using a custom encoding
     ///
     /// Use this initializer when you need to decode the local-part bytes with a specific
@@ -48,7 +30,10 @@ extension String {
     /// - Parameters:
     ///   - localPart: The local-part to represent
     ///   - encoding: The Unicode encoding to use for decoding
-    public init<Encoding>(_ localPart: RFC_5321.EmailAddress.LocalPart, as encoding: Encoding.Type)
+    public init<Encoding>(
+        _ localPart: RFC_5321.EmailAddress.LocalPart,
+        as encoding: Encoding.Type = UTF8.self
+    )
         where Encoding: _UnicodeEncoding, Encoding.CodeUnit == UInt8 {
         self = String(decoding: [UInt8](localPart), as: encoding)
     }
@@ -72,7 +57,7 @@ extension String {
     public init(_ email: RFC_5321.EmailAddress) {
         if let name = email.displayName {
             let needsQuoting = name.contains(where: {
-                !$0.isASCIILetter && !$0.isASCIIDigit && !$0.isASCIIWhitespace
+                !$0.ascii.isLetter && !$0.ascii.isDigit && !$0.ascii.isWhitespace
             })
             let quotedName = needsQuoting ? "\"\(name.replacing("\"", with: "\\\""))\"" : name
             self = "\(quotedName) <\(email.localPart)@\(email.domain.name)>"

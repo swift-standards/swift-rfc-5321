@@ -6,7 +6,6 @@
 //
 
 import RFC_5321
-import RFC_1123
 import Testing
 
 typealias EmailAddress = RFC_5321.EmailAddress
@@ -37,7 +36,7 @@ struct `README Verification` {
     @Test
     func `README Line 70-80: Create from components`() throws {
         let localPart = try EmailAddress.LocalPart("support")
-        let domain = try Domain("example.com")
+        let domain = try RFC_1123.Domain("example.com")
         let email = try EmailAddress(
             displayName: "Support Team",
             localPart: localPart,
@@ -77,7 +76,7 @@ struct `README Verification` {
 
     @Test
     func `README Line 145: Domain usage`() throws {
-        let domain = try Domain("mail.example.com")
+        let domain = try RFC_1123.Domain("mail.example.com")
         #expect(domain.name == "mail.example.com")
     }
 }
