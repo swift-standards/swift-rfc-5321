@@ -91,13 +91,13 @@ let valid3 = try EmailAddress("\"user name\"@example.com")
 // Invalid addresses throw errors
 do {
     let invalid = try EmailAddress("no-at-sign")
-} catch EmailAddress.ValidationError.missingAtSign {
+} catch EmailAddress.Error.missingAtSign {
     print("Missing @ symbol")
 }
 
 do {
     let tooLong = try EmailAddress("verylonglocalpartthatexceedssixtyfourcharactersshouldnotbeallowed@example.com")
-} catch EmailAddress.ValidationError.localPartTooLong(let length) {
+} catch EmailAddress.Error.localPartTooLong(let length) {
     print("Local part too long: \(length) characters")
 }
 ```
@@ -148,7 +148,7 @@ let domain = try Domain("mail.example.com")
 ### Validation Errors
 
 ```swift
-public enum ValidationError: Error {
+public enum Error: Swift.Error {
     case missingAtSign
     case invalidDotAtom
     case invalidQuotedString

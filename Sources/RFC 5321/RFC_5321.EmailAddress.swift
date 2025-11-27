@@ -28,8 +28,12 @@ extension RFC_5321 {
         /// Initialize with validated components
         ///
         /// This is the canonical initializer. Components are already validated.
-        public init(displayName: (some StringProtocol)? = nil, localPart: LocalPart, domain: RFC_1123.Domain) throws(Error) {
-            self.displayName = displayName.map { String($0).trimming(.ascii.whitespaces) }
+        public init(
+            displayName: String? = nil,
+            localPart: LocalPart,
+            domain: RFC_1123.Domain
+        ) throws(Error) {
+            self.displayName = displayName?.trimming(.ascii.whitespaces)
             self.localPart = localPart
             self.domain = domain
 
@@ -89,10 +93,8 @@ extension RFC_5321.EmailAddress {
             let domain: RFC_1123.Domain
             do {
                 domain = try RFC_1123.Domain(domainString)
-            } catch let domainError as Domain.ValidationError {
+            } catch let domainError {
                 throw Error.invalidDomain(domainError)
-            } catch {
-                fatalError("Unexpected error type from RFC_1123.Domain.init: \(error)")
             }
 
             try self.init(
@@ -120,14 +122,12 @@ extension RFC_5321.EmailAddress {
             let domain: RFC_1123.Domain
             do {
                 domain = try RFC_1123.Domain(domainString)
-            } catch let domainError as Domain.ValidationError {
+            } catch let domainError {
                 throw Error.invalidDomain(domainError)
-            } catch {
-                fatalError("Unexpected error type from RFC_1123.Domain.init: \(error)")
             }
 
             try self.init(
-                displayName: nil as String?,
+                displayName: nil,
                 localPart: localPart,
                 domain: domain
             )
@@ -187,5 +187,5 @@ extension RFC_5321.EmailAddress: Codable {
 
 extension RFC_5321.EmailAddress: RawRepresentable {
     public var rawValue: String { String(self) }
-    public init?(rawValue: some StringProtocol) { try? self.init(rawValue) }
+    public init?(rawValue: String) { try? self.init(rawValue) }
 }

@@ -34,7 +34,7 @@ extension RFC_5321.EmailAddress {
         case invalidLocalPart(_ error: LocalPart.Error)
 
         /// Domain validation failed
-        case invalidDomain(_ error: Domain.ValidationError)
+        case invalidDomain(_ error: RFC_1123.Domain.Error)
     }
 }
 
