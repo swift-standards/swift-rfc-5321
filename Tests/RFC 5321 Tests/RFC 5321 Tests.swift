@@ -20,7 +20,7 @@ struct `RFC 5321 Domain Tests` {
 
     @Test
     func `Fails with empty address literal`() throws {
-        #expect(throws: Domain.ValidationError.self) {
+        #expect(throws: RFC_1123.Domain.Error.self) {
             _ = try RFC_1123.Domain("[]")
         }
     }
