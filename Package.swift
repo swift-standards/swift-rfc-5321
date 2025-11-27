@@ -14,7 +14,7 @@ let package = Package(
         .library(name: "RFC 5321", targets: ["RFC 5321"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-standards/swift-incits-4-1986.git", from: "0.0.1"),
+        .package(url: "https://github.com/swift-standards/swift-incits-4-1986.git", from: "0.1.0"),
         .package(url: "https://github.com/swift-standards/swift-rfc-1123.git", from: "0.0.1")
     ],
     targets: [
