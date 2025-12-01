@@ -22,7 +22,7 @@ extension RFC_5321.EmailAddress.LocalPart {
     ///
     /// These represent atomic constraint violations at the local-part level,
     /// as defined by RFC 5321 Section 4.5.3.1.1.
-    public enum Error: Swift.Error, Equatable {
+    public enum Error: Swift.Error, Sendable, Equatable {
         /// Local-part is empty
         case empty
 
@@ -31,6 +31,9 @@ extension RFC_5321.EmailAddress.LocalPart {
 
         /// Local-part contains non-ASCII characters (RFC 5321 is ASCII-only)
         case nonASCII
+
+        /// Invalid character in local-part
+        case invalidCharacter(_ value: String, byte: UInt8)
 
         /// Dot-atom format is invalid
         case invalidDotAtom(_ localPart: String)
@@ -51,6 +54,8 @@ extension RFC_5321.EmailAddress.LocalPart.Error: CustomStringConvertible {
             return "Local-part is too long (\(length) bytes, maximum 64)"
         case .nonASCII:
             return "Local-part must contain only ASCII characters (RFC 5321)"
+        case .invalidCharacter(let value, let byte):
+            return "Invalid byte 0x\(String(byte, radix: 16)) in local-part '\(value)'"
         case .invalidDotAtom(let localPart):
             return "Invalid dot-atom format in local-part '\(localPart)'"
         case .invalidQuotedString(let localPart):

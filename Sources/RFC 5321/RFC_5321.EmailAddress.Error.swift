@@ -23,7 +23,7 @@ extension RFC_5321.EmailAddress {
     ///
     /// These represent compositional constraint violations at the email address level,
     /// as defined by RFC 5321.
-    public enum Error: Swift.Error, Equatable {
+    public enum Error: Swift.Error, Sendable, Equatable {
         /// Email address is missing @ sign
         case missingAtSign
 
