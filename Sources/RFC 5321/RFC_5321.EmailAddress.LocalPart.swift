@@ -5,8 +5,8 @@
 //  LocalPart implementation with canonical byte storage
 //
 
-import Standards
 import INCITS_4_1986
+import Standards
 
 extension RFC_5321.EmailAddress {
     /// RFC 5321 compliant local-part
@@ -69,8 +69,8 @@ extension RFC_5321.EmailAddress {
         // MARK: - Format
 
         private enum Format: Hashable, Codable {
-            case dotAtom     // Regular unquoted format
-            case quoted      // Quoted string format
+            case dotAtom  // Regular unquoted format
+            case quoted  // Quoted string format
         }
     }
 }
@@ -169,26 +169,26 @@ extension RFC_5321.EmailAddress.LocalPart: UInt8.ASCII.Serializable {
             var index = bytes.startIndex
 
             for byte in bytes {
-                let isAtext = byte.ascii.isLetter || byte.ascii.isDigit ||
-                    byte == 0x21 || // !
-                    byte == 0x23 || // #
-                    byte == 0x24 || // $
-                    byte == 0x25 || // %
-                    byte == 0x26 || // &
-                    byte == 0x27 || // '
-                    byte == 0x2A || // *
-                    byte == 0x2B || // +
-                    byte == 0x2D || // -
-                    byte == 0x2F || // /
-                    byte == 0x3D || // =
-                    byte == 0x3F || // ?
-                    byte == 0x5E || // ^
-                    byte == 0x5F || // _
-                    byte == 0x60 || // `
-                    byte == 0x7B || // {
-                    byte == 0x7C || // |
-                    byte == 0x7D || // }
-                    byte == 0x7E    // ~
+                let isAtext =
+                    byte.ascii.isLetter || byte.ascii.isDigit || byte == 0x21  // !
+                    || byte == 0x23  // #
+                    || byte == 0x24  // $
+                    || byte == 0x25  // %
+                    || byte == 0x26  // &
+                    || byte == 0x27  // '
+                    || byte == 0x2A  // *
+                    || byte == 0x2B  // +
+                    || byte == 0x2D  // -
+                    || byte == 0x2F  // /
+                    || byte == 0x3D  // =
+                    || byte == 0x3F  // ?
+                    || byte == 0x5E  // ^
+                    || byte == 0x5F  // _
+                    || byte == 0x60  // `
+                    || byte == 0x7B  // {
+                    || byte == 0x7C  // |
+                    || byte == 0x7D  // }
+                    || byte == 0x7E  // ~
 
                 let isDot = byte == .ascii.period
 

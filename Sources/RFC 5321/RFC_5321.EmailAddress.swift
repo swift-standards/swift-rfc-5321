@@ -5,9 +5,9 @@
 //  EmailAddress implementation
 //
 
-import Standards
 import INCITS_4_1986
 public import RFC_1123
+import Standards
 
 extension RFC_5321 {
     /// RFC 5321 compliant email address (basic SMTP format)
@@ -75,22 +75,6 @@ extension RFC_5321 {
     }
 }
 
-//// MARK: - Convenience Initializers
-//
-//extension RFC_5321.EmailAddress {
-//    /// Initialize from string representation ("Name <local@domain>" or "local@domain")
-//    ///
-//    /// Convenience initializer that converts String to bytes and delegates to byte parser.
-//    ///
-//    /// String parsing is derived composition:
-//    /// ```
-//    /// String → [UInt8] (UTF-8) → EmailAddress
-//    /// ```
-//    public init(_ string: some StringProtocol) throws(Error) {
-//        try self.init(ascii: Array(string.utf8))
-//    }
-//}
-
 // MARK: - Byte-Level Parsing (UInt8.ASCII.Serializable)
 
 extension RFC_5321.EmailAddress: UInt8.ASCII.Serializable {
@@ -124,8 +108,8 @@ extension RFC_5321.EmailAddress: UInt8.ASCII.Serializable {
         guard !bytes.isEmpty else { throw Error.missingAtSign }
 
         // Check for angle bracket format: [display-name] <local@domain>
-        if let openAngle = bytes.firstIndex(where: { $0 == 0x3C }), // <
-           let closeAngle = bytes.firstIndex(where: { $0 == 0x3E }) { // >
+        if let openAngle = bytes.firstIndex(where: { $0 == 0x3C }),  // <
+            let closeAngle = bytes.firstIndex(where: { $0 == 0x3E }) {  // >
 
             // Extract display name if present
             let displayName: String?
@@ -271,4 +255,4 @@ extension RFC_5321.EmailAddress {
 }
 
 // MARK: - Protocol Conformances
-extension RFC_5321.EmailAddress: CustomStringConvertible { }
+extension RFC_5321.EmailAddress: CustomStringConvertible {}

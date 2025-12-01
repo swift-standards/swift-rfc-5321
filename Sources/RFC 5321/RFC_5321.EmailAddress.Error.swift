@@ -15,8 +15,8 @@
 //
 // EmailAddress-level validation errors
 
-import Standards
 public import RFC_1123
+import Standards
 
 extension RFC_5321.EmailAddress {
     /// Errors that can occur during email address validation

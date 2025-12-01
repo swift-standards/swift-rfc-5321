@@ -5,9 +5,9 @@
 //  Created by Coen ten Thije Boonkkamp on 28/12/2024.
 //
 
-import RFC_5321
-import RFC_1123
 import Foundation
+import RFC_1123
+import RFC_5321
 import Testing
 
 @Suite
