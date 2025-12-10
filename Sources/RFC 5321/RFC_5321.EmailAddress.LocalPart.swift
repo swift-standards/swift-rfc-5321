@@ -75,9 +75,9 @@ extension RFC_5321.EmailAddress {
     }
 }
 
-// MARK: - Byte-Level Parsing (UInt8.ASCII.Serializable)
+// MARK: - Byte-Level Parsing (Binary.ASCII.Serializable)
 
-extension RFC_5321.EmailAddress.LocalPart: UInt8.ASCII.Serializable {
+extension RFC_5321.EmailAddress.LocalPart: Binary.ASCII.Serializable {
     /// Initialize from ASCII bytes, validating RFC 5321 rules
     ///
     /// ## Category Theory
@@ -223,7 +223,7 @@ extension RFC_5321.EmailAddress.LocalPart: UInt8.ASCII.Serializable {
 
 // MARK: - Protocol Conformances
 
-extension RFC_5321.EmailAddress.LocalPart: UInt8.ASCII.RawRepresentable {
+extension RFC_5321.EmailAddress.LocalPart: Binary.ASCII.RawRepresentable {
     public typealias RawValue = String
 }
 
@@ -232,7 +232,7 @@ extension RFC_5321.EmailAddress.LocalPart: UInt8.ASCII.RawRepresentable {
 extension RFC_5321.EmailAddress.LocalPart {
     /// Serialize local-part to ASCII bytes
     ///
-    /// Required implementation for `UInt8.ASCII.RawRepresentable` to avoid
+    /// Required implementation for `Binary.ASCII.RawRepresentable` to avoid
     /// infinite recursion (since `rawValue` is synthesized from serialization).
     public static func serialize<Buffer: RangeReplaceableCollection>(
         ascii localPart: Self,

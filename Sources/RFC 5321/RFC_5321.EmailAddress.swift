@@ -75,9 +75,9 @@ extension RFC_5321 {
     }
 }
 
-// MARK: - Byte-Level Parsing (UInt8.ASCII.Serializable)
+// MARK: - Byte-Level Parsing (Binary.ASCII.Serializable)
 
-extension RFC_5321.EmailAddress: UInt8.ASCII.Serializable {
+extension RFC_5321.EmailAddress: Binary.ASCII.Serializable {
     /// Initialize from ASCII bytes, validating RFC 5321 rules
     ///
     /// ## Category Theory
@@ -109,7 +109,8 @@ extension RFC_5321.EmailAddress: UInt8.ASCII.Serializable {
 
         // Check for angle bracket format: [display-name] <local@domain>
         if let openAngle = bytes.firstIndex(where: { $0 == 0x3C }),  // <
-            let closeAngle = bytes.firstIndex(where: { $0 == 0x3E }) {  // >
+            let closeAngle = bytes.firstIndex(where: { $0 == 0x3E })
+        {  // >
 
             // Extract display name if present
             let displayName: String?
@@ -187,7 +188,7 @@ extension RFC_5321.EmailAddress: UInt8.ASCII.Serializable {
 
 // MARK: - Protocol Conformances
 
-extension RFC_5321.EmailAddress: UInt8.ASCII.RawRepresentable {
+extension RFC_5321.EmailAddress: Binary.ASCII.RawRepresentable {
     public typealias RawValue = String
 }
 
@@ -196,7 +197,7 @@ extension RFC_5321.EmailAddress: UInt8.ASCII.RawRepresentable {
 extension RFC_5321.EmailAddress {
     /// Serialize email address to ASCII bytes
     ///
-    /// Required implementation for `UInt8.ASCII.RawRepresentable` to avoid
+    /// Required implementation for `Binary.ASCII.RawRepresentable` to avoid
     /// infinite recursion (since `rawValue` is synthesized from serialization).
     public static func serialize<Buffer: RangeReplaceableCollection>(
         ascii email: Self,
