@@ -109,8 +109,7 @@ extension RFC_5321.EmailAddress: Binary.ASCII.Serializable {
 
         // Check for angle bracket format: [display-name] <local@domain>
         if let openAngle = bytes.firstIndex(where: { $0 == 0x3C }),  // <
-            let closeAngle = bytes.firstIndex(where: { $0 == 0x3E })
-        {  // >
+            let closeAngle = bytes.firstIndex(where: { $0 == 0x3E }) {  // >
 
             // Extract display name if present
             let displayName: String?
