@@ -7,7 +7,7 @@
 
 import INCITS_4_1986
 public import RFC_1123
-import Standards
+import Standard_Library_Extensions
 
 extension RFC_5321 {
     /// RFC 5321 compliant email address (basic SMTP format)

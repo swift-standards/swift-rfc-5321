@@ -6,7 +6,7 @@
 //
 
 import INCITS_4_1986
-import Standards
+import Standard_Library_Extensions
 
 extension RFC_5321.EmailAddress {
     /// RFC 5321 compliant local-part

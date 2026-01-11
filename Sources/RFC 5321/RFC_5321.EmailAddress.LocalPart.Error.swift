@@ -15,7 +15,7 @@
 //
 // LocalPart-level validation errors
 
-import Standards
+import Standard_Library_Extensions
 
 extension RFC_5321.EmailAddress.LocalPart {
     /// Errors that can occur during local-part validation
