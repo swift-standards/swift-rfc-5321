@@ -14,8 +14,8 @@ let package = Package(
         .library(name: "RFC 5321", targets: ["RFC 5321"]),
     ],
     dependencies: [
-        .package(path: "../../swift-foundations/swift-ascii"),
-        .package(path: "../swift-rfc-1123")
+        .package(url: "https://github.com/swift-foundations/swift-ascii.git", from: "0.0.1"),
+        .package(url: "https://github.com/swift-standards/swift-rfc-1123.git", from: "0.0.1")
     ],
     targets: [
         .target(
