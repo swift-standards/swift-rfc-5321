@@ -15,5 +15,5 @@
 //
 // Re-export dependencies per STANDARD_IMPLEMENTATION_PATTERNS.md FILE-1
 
-@_exported public import INCITS_4_1986
+@_exported public import ASCII
 @_exported public import RFC_1123

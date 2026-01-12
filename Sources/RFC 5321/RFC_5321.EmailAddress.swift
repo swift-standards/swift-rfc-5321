@@ -5,7 +5,7 @@
 //  EmailAddress implementation
 //
 
-import INCITS_4_1986
+import ASCII
 public import RFC_1123
 import Standard_Library_Extensions
 

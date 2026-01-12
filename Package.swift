@@ -14,7 +14,7 @@ let package = Package(
         .library(name: "RFC 5321", targets: ["RFC 5321"]),
     ],
     dependencies: [
-        .package(path: "../swift-incits-4-1986"),
+        .package(path: "../../swift-foundations/swift-ascii"),
         .package(path: "../swift-rfc-1123")
     ],
     targets: [
@@ -22,7 +22,7 @@ let package = Package(
             name: "RFC 5321",
             dependencies: [
                 .product(name: "RFC 1123", package: "swift-rfc-1123"),
-                .product(name: "INCITS 4 1986", package: "swift-incits-4-1986")
+                .product(name: "ASCII", package: "swift-ascii")
             ]
         ),
         .testTarget(

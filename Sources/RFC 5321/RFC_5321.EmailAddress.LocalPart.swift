@@ -5,7 +5,7 @@
 //  LocalPart implementation with canonical byte storage
 //
 
-import INCITS_4_1986
+import ASCII
 import Standard_Library_Extensions
 
 extension RFC_5321.EmailAddress {
