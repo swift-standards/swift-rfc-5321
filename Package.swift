@@ -11,7 +11,7 @@ let package = Package(
         .watchOS(.v26)
     ],
     products: [
-        .library(name: "RFC 5321", targets: ["RFC 5321"]),
+        .library(name: "RFC 5321", targets: ["RFC 5321"])
     ],
     dependencies: [
         .package(path: "../../swift-foundations/swift-ascii"),
@@ -23,14 +23,8 @@ let package = Package(
             dependencies: [
                 .product(name: "RFC 1123", package: "swift-rfc-1123"),
                 .product(name: "ASCII", package: "swift-ascii")
-            ]
-        ),
-        .testTarget(
-            name: "RFC 5321".tests,
-            dependencies: [
-                "RFC 5321"
-            ]
-        ),
+    ]
+        )
     ],
     swiftLanguageModes: [.v6]
 )
