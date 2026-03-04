@@ -1,5 +1,5 @@
 //
-//  RFC_5321.Parse.EmailAddress.swift
+//  RFC_5321.EmailAddress.Parse.swift
 //  swift-rfc-5321
 //
 //  SMTP email address: [display-name] local-part "@" domain
@@ -7,7 +7,7 @@
 
 public import Parser_Primitives
 
-extension RFC_5321.Parse {
+extension RFC_5321.EmailAddress {
     /// Parses an SMTP email address per RFC 5321 Section 4.1.2.
     ///
     /// Supports two formats:
@@ -16,14 +16,14 @@ extension RFC_5321.Parse {
     ///
     /// Returns the raw byte slices for each component. Validation of
     /// local-part and domain content is left to the caller.
-    public struct EmailAddress<Input: Collection.Slice.`Protocol`>: Sendable
+    public struct Parse<Input: Collection.Slice.`Protocol`>: Sendable
     where Input: Sendable, Input.Element == UInt8 {
         @inlinable
         public init() {}
     }
 }
 
-extension RFC_5321.Parse.EmailAddress {
+extension RFC_5321.EmailAddress.Parse {
     public struct Output: Sendable {
         public let displayName: Input?
         public let localPart: Input
@@ -46,9 +46,9 @@ extension RFC_5321.Parse.EmailAddress {
     }
 }
 
-extension RFC_5321.Parse.EmailAddress: Parser.`Protocol` {
+extension RFC_5321.EmailAddress.Parse: Parser.`Protocol` {
     public typealias ParseOutput = Output
-    public typealias Failure = RFC_5321.Parse.EmailAddress<Input>.Error
+    public typealias Failure = RFC_5321.EmailAddress.Parse<Input>.Error
 
     @inlinable
     public func parse(_ input: inout Input) throws(Failure) -> Output {
